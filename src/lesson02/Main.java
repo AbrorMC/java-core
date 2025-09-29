@@ -27,6 +27,9 @@ public class Main {
 
         System.out.println("Task number 9:\n");
         printPrimeNumbers(getInput());
+
+        System.out.println("Task number 10:\n");
+        printTriangles(getInput());
     }
 
     public static int getInput() {
@@ -139,5 +142,31 @@ public class Main {
         }
         return true;
     }
-}
 
+    public static void printTriangles(int number) {
+        System.out.print("\n");
+        for (int i = 0; i < number; i++) {
+            for (int j = 0; j < 2 * number; j++) {
+                if (j > i && j - i < number) {
+                    System.out.print("  ");
+                } else {
+                    System.out.print("*");
+                }
+            }
+            System.out.print("\n");
+        }
+        
+        System.out.print("\n");
+        
+        for (int i = 0; i < number; i++) {
+            for (int j = 0; j < 2 * number; j++) {
+                if (j + i < 2 * number - 1 && j + i >= number) {
+                    System.out.print("  ");
+                } else {
+                    System.out.print("*");
+                }
+            }
+            System.out.print("\n");
+        } 
+    }
+}
