@@ -8,37 +8,32 @@ public class PartTwo {
 
     public void runTasks() {
 
-        System.out.println("Task number 1:\n");
+        System.out.println("\nTask number 1:\n");
         swapValues(getIntFromInput(), getIntFromInput());
 
-        System.out.println("Task number 2:\n");
+        System.out.println("\nTask number 2:\n");
         printMultiplicationTable(getIntFromInput());
 
-        System.out.println("Task number 3:\n");
+        System.out.println("\nTask number 3:\n");
         currencyConverter(getIntFromInput());
 
-        System.out.println("Task number 4:\n");
+        System.out.println("\nTask number 4:\n");
         printOddOrEven(getIntFromInput());
 
-        System.out.println("Task number 5:\n");
+        System.out.println("\nTask number 5:\n");
         printMax(getIntFromInput(), getIntFromInput(), getIntFromInput());
 
-        System.out.println("Task number 6:\n");
+        System.out.println("\nTask number 6:\n");
         calculator(getDoubleFromInput(), getDoubleFromInput(), getCharFromInput());
 
-        System.out.println("Task number 7:\n");
+        System.out.println("\nTask number 7:\n");
         printAverageValue(getIntFromInput());
 
-        System.out.println("Task number 8:\n");
-        printPrimeNumbers(getIntFromInput());
-
-        System.out.println("Task number 9:\n");
+        System.out.println("\nTask number 8:\n");
         searchValue(getIntFromInput(), getIntFromInput());
 
-        System.out.println("Task number 10:\n");
+        System.out.println("\nTask number 9:\n");
         guessTheNumber();
-
-        scanner.close();
 
     }
 
@@ -157,7 +152,7 @@ public class PartTwo {
         return result;
     }
 
-    private int getDoubleFromInput() {
+    private double getDoubleFromInput() {
         System.out.println("Please, enter number");
         double result;
         while (true) {
@@ -176,12 +171,12 @@ public class PartTwo {
         return result;
     }
 
-    private int getCharFromInput() {
+    private char getCharFromInput() {
         System.out.println("Please, enter one of the symbols +,-,*,/");
         char result;
         while (true) {
             if (scanner.hasNext("[+\\-*/]")) {
-                result = scanner.next();
+                result = scanner.next().charAt(0);
                 break;
             } else {
                 System.out.println("Please, enter valid symbol");

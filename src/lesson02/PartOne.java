@@ -10,31 +10,29 @@ public class PartOne {
         System.out.println("Task number 1:\n");
         numbersFromOneToHundred();
 
-        System.out.println("Task number 2:\n");
+        System.out.println("\nTask number 2:\n");
         sumOfNumbers(getInput());
 
-        System.out.println("Task number 3 and 7:\n");
+        System.out.println("\nTask number 3 and 7:\n");
         factorial(getInput());
 
-        System.out.println("Task number 4:\n");
+        System.out.println("\nTask number 4:\n");
         sumOfOddNumbers(getInput());
 
-        System.out.println("Task number 5:\n");
+        System.out.println("\nTask number 5:\n");
         sumOfDigits(getInput());
 
-        System.out.println("Task number 6:\n");
+        System.out.println("\nTask number 6:\n");
         turnNumber(getInput());
 
-        System.out.println("Task number 8:\n");
+        System.out.println("\nTask number 8:\n");
         findDivisibleToSeven();
 
-        System.out.println("Task number 9:\n");
+        System.out.println("\nTask number 9:\n");
         printPrimeNumbers(getInput());
 
-        System.out.println("Task number 10:\n");
+        System.out.println("\nTask number 10:\n");
         printTriangles(getInput());
-
-        scanner.close();
 
     }
 
