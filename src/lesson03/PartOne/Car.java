@@ -1,4 +1,4 @@
-package lesson03;
+package lesson03.PartOne;
 
 public class Car {
     private String country;

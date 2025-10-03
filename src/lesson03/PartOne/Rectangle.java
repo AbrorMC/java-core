@@ -1,4 +1,4 @@
-package lesson03;
+package lesson03.PartOne;
 
 public class Rectangle {
     private int length;

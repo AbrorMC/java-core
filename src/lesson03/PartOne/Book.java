@@ -1,4 +1,4 @@
-package lesson03;
+package lesson03.PartOne;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +20,17 @@ public class Book {
     }
 
     public String getBookInfo() {
-        return "[" + isbn + "] " + name + " — " + author + " (" + year + "), статус: " + status;
+        return "[" + isbn + "] " + name + " - " + author + " (" + year + "), статус: " + status;
     }
 
     public static List<Book> getBooks() {
         return books;
     }
 
-    public static Book addNewBook(String isbn, String name, String author, int year) {
-        Book newBook = new Book(isbn, name, author, year);
-        books.add(newBook);
-        return newBook;
+    public static void addNewBook(Book book) {
+        if (book != null) {
+            books.add(book);
+        }
     }
 
     public String reserveBook() {
