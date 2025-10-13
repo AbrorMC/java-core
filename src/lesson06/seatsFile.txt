@@ -14,7 +14,7 @@ id: A4, class: 0, booked: false
 id: C4, class: 0, booked: false
 id: D4, class: 0, booked: false
 id: F4, class: 0, booked: false
-id: A5, class: 0, booked: true, client_id: c1, client_name: Ivan
+id: A5, class: 0, booked: false
 id: C5, class: 0, booked: false
 id: D5, class: 0, booked: false
 id: F5, class: 0, booked: false

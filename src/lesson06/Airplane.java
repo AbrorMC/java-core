@@ -179,6 +179,8 @@ public class Airplane {
         for (int j = 0; j < rows; j++) {
             System.out.printf(" %d\t", j + 1);
         }
-        System.out.println("\n");
+        System.out.println("");
+        System.out.println("\nBusiness class => [ ]\tEconomy class => | |\tLimited recline => | }\n");
+        System.out.println("");
     }
 }
