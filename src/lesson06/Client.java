@@ -1,7 +1,5 @@
 package lesson06;
 
-import java.util.List;
-
 public class Client {
     private String id;
     private String name;

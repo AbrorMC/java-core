@@ -7,6 +7,7 @@ public class Airplane {
     private final Map<String, Seat> seats = new LinkedHashMap<>();
     private final int minBusinessRow = 1;
     private final int maxBusinessRow = 5;
+    private final int rows = 21;
     private final int firstLimitedReclineRow = 7;
     private final int secondLimitedReclineRow = 21;
     private final static String FILENAME = "src/lesson06/seatsFile.txt";
@@ -26,8 +27,7 @@ public class Airplane {
     }
 
     public void saveSeatsToFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME)))
-        {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME))) {
             seats.values().stream()
                     .map(s -> "id: " + s.getId() +
                             ", class: " + s.getSeatClass().ordinal() +
@@ -39,7 +39,8 @@ public class Airplane {
                         try {
                             bw.write(s);
                         } catch (IOException e) {
-                            System.out.println(e.getMessage());;
+                            System.out.println(e.getMessage());
+                            ;
                         }
                     });
         } catch (IOException e) {
@@ -49,8 +50,7 @@ public class Airplane {
 
     private boolean loadSeatsFromFile() {
         boolean result = false;
-        try (BufferedReader br = new BufferedReader(new FileReader(FILENAME)))
-        {
+        try (BufferedReader br = new BufferedReader(new FileReader(FILENAME))) {
             String s;
             while ((s = br.readLine()) != null) {
                 List<String> record = Arrays.stream(s.split(",")).toList();
@@ -66,16 +66,14 @@ public class Airplane {
     private void initSeat(List<String> record) {
         Seat seat = new Seat(
                 record.get(0).trim().split(" ")[1],
-                SeatClass.values()[Integer.parseInt(record.get(1).trim().split(" ")[1])]
-        );
+                SeatClass.values()[Integer.parseInt(record.get(1).trim().split(" ")[1])]);
 
         seat.setBooked(Boolean.parseBoolean(record.get(2).trim().split(" ")[1]));
 
         if (record.size() == 5) {
             Client client = new Client(
                     record.get(3).trim().split(" ")[1],
-                    record.get(4).trim().split(" ")[1]
-            );
+                    record.get(4).trim().split(" ")[1]);
             seat.setClient(client);
         }
 
@@ -105,7 +103,7 @@ public class Airplane {
     }
 
     private void generateEconomySeats(int row) {
-        if (row > maxBusinessRow) {
+        if (row > maxBusinessRow && row <= rows) {
             char ch = 'A';
             if (row != firstLimitedReclineRow && row != secondLimitedReclineRow) {
                 for (int i = 1; i < 7; i++) {
@@ -126,7 +124,7 @@ public class Airplane {
     }
 
     private void generateLimitedReclineSeats(int row) {
-        if (row > maxBusinessRow) {
+        if (row > maxBusinessRow && row <= rows) {
             char ch = 'A';
             if (row == firstLimitedReclineRow) {
                 for (int i = 1; i < 7; i++) {
@@ -158,4 +156,29 @@ public class Airplane {
                 .forEach(Seat::printSeatInfo);
     }
 
+    public void print() {
+        System.out.println();
+        Seat seat;
+        for (int i = 0; i < 6; i++) {
+            System.out.printf("%c\t", 'A' + i);
+            for (int j = 0; j < rows; j++) {
+                if (seats.containsKey("" + (char) ('A' + i) + (int) (j + 1))) {
+                    seat = seats.get("" + (char) ('A' + i) + (int) (j + 1));
+                    System.out.printf("%s", seat.getSeatClass() == SeatClass.BUSINESS_CLASS ? "[" : "|");
+                    System.out.printf("%s", seat.isBooked() ? "*" : " ");
+                    System.out.printf("%s",
+                            seat.getSeatClass() == SeatClass.BUSINESS_CLASS ? "]\t"
+                                    : seat.getSeatClass() == SeatClass.LIMITED_RECLINE ? "}\t" : "|\t");
+                } else {
+                    System.out.print("   \t");
+                }
+            }
+            System.out.println();
+        }
+        System.out.print("\n\t");
+        for (int j = 0; j < rows; j++) {
+            System.out.printf(" %d\t", j + 1);
+        }
+        System.out.println("\n");
+    }
 }

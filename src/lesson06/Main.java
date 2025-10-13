@@ -1,9 +1,10 @@
 package lesson06;
 
-
 public class Main {
     public static void main(String[] args) {
         Airplane airplane = new Airplane();
+
+        airplane.print();
 
         Client client1 = new Client("c1", "Ivan Ivanov");
         Client client2 = new Client("c2", "Anna Petrova");
@@ -29,7 +30,8 @@ public class Main {
         client1.getSeatInfo(airplane, "A5");
         client1.cancelBook(airplane, "A5");
 
+        airplane.print();
+
         airplane.saveSeatsToFile();
     }
 }
-
