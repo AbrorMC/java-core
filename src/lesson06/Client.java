@@ -1,5 +1,7 @@
 package lesson06;
 
+import java.time.Instant;
+
 public class Client {
     private String id;
     private String name;
@@ -21,9 +23,10 @@ public class Client {
         if (airplane.getSeats().containsKey(seatId)) {
             Seat seat = airplane.getSeats().get(seatId);
 
-            if (!seat.isBooked()) {
-                seat.setBooked(true);
+            if (seat.getStatus() != SeatStatus.BOOKED && seat.getStatus() != SeatStatus.PAID) {
+                seat.setStatus(SeatStatus.BOOKED);
                 seat.setClient(this);
+                seat.setDateTimeBooking(Instant.now());
             }
         }
     }
@@ -32,9 +35,10 @@ public class Client {
         if (airplane.getSeats().containsKey(seatId)) {
             Seat seat = airplane.getSeats().get(seatId);
 
-            if (seat.isBooked()) {
-                seat.setBooked(false);
+            if (seat.getStatus() == SeatStatus.BOOKED) {
+                seat.setStatus(SeatStatus.AVAILABLE);
                 seat.setClient(null);
+                seat.setDateTimeBooking(null);
             }
         }
     }

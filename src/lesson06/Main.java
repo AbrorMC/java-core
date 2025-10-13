@@ -1,8 +1,11 @@
 package lesson06;
 
+import java.time.LocalDateTime;
+
 public class Main {
     public static void main(String[] args) {
-        Airplane airplane = new Airplane();
+        LocalDateTime departureDate = LocalDateTime.of(2025, 1, 2, 0, 0);
+        Airplane airplane = new Airplane(departureDate);
 
         airplane.print();
 
@@ -19,11 +22,14 @@ public class Main {
         client3.getSeatInfo(airplane, "F21");
         client3.book(airplane, "F21");
 
+        System.out.println("\nPaid seats\n");
+        airplane.getPaidSeats();
+
         System.out.println("\nReserved seats\n");
         airplane.getReservedSeats();
 
-        System.out.println("\nFree seats\n");
-        airplane.getFreeSeats();
+        System.out.println("\nAvailable seats\n");
+        airplane.getAvailableSeats();
 
         airplane.saveSeatsToFile();
 
