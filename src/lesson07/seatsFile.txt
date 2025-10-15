@@ -40,7 +40,7 @@ id: A9, class: 1, status: 0
 id: B9, class: 1, status: 0
 id: C9, class: 1, status: 0
 id: D9, class: 1, status: 0
-id: E9, class: 1, status: 1, client_id: c2, client_name: Anna Petrova, booking_date_and_time: 2025-10-13T13:03:25.031967Z
+id: E9, class: 1, status: 2, client_id: c2, client_name: Anna Petrova, booking_date_and_time: 2025-10-15T07:07:29.993971100Z, payment_date_and_time: 2025-10-15T07:19:47.683476900Z
 id: F9, class: 1, status: 0
 id: A10, class: 1, status: 0
 id: B10, class: 1, status: 0
@@ -113,4 +113,4 @@ id: C21, class: 1, status: 0
 id: D21, class: 1, status: 0
 id: E21, class: 1, status: 0
 id: A21, class: 2, status: 0
-id: F21, class: 2, status: 1, client_id: c3, client_name: Sergey Semenov, booking_date_and_time: 2025-10-13T13:03:25.031967Z
+id: F21, class: 2, status: 2, client_id: c3, client_name: Sergey Semenov, booking_date_and_time: 2025-10-15T07:07:29.993971100Z, payment_date_and_time: 2025-10-15T07:19:47.683476900Z

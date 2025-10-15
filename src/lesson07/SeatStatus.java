@@ -1,4 +1,4 @@
-package lesson06;
+package lesson07;
 
 public enum SeatStatus {
     AVAILABLE,

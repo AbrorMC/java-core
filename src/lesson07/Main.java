@@ -1,4 +1,4 @@
-package lesson06;
+package lesson07;
 
 import java.time.LocalDateTime;
 
@@ -35,6 +35,12 @@ public class Main {
 
         client1.getSeatInfo(airplane, "A5");
         client1.cancelBook(airplane, "A5");
+
+        client2.getSeatInfo(airplane, "E9");
+        client2.pay(airplane, "E9");
+
+        client3.getSeatInfo(airplane, "F21");
+        client3.pay(airplane, "F21");
 
         airplane.print();
 

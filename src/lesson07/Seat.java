@@ -1,4 +1,4 @@
-package lesson06;
+package lesson07;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -10,7 +10,8 @@ public class Seat {
     private SeatClass seatClass;
     private SeatStatus status;
     private Client client;
-    private Instant dateTimeBooking;
+    private Instant bookingTime;
+    private Instant paymentTime;
 
     public Seat(String id, SeatClass seatClass) {
         this.id = id;
@@ -19,12 +20,14 @@ public class Seat {
         this.client = null;
     }
 
-    public Seat(String id, SeatClass seatClass, SeatStatus status, Client client, Instant dateTimeBooking) {
+    public Seat(String id, SeatClass seatClass, SeatStatus status, Client client, Instant bookingTime,
+            Instant paymentTime) {
         this.id = id;
         this.seatClass = seatClass;
         this.status = status;
         this.client = client;
-        this.dateTimeBooking = dateTimeBooking;
+        this.bookingTime = bookingTime;
+        this.paymentTime = paymentTime;
     }
 
     public String getId() {
@@ -43,8 +46,12 @@ public class Seat {
         return client;
     }
 
-    public Instant getDateTimeBooking() {
-        return dateTimeBooking;
+    public Instant getBookingTime() {
+        return bookingTime;
+    }
+
+    public Instant getPaymentTime() {
+        return paymentTime;
     }
 
     public void setStatus(SeatStatus status) {
@@ -55,8 +62,12 @@ public class Seat {
         this.client = client;
     }
 
-    public void setDateTimeBooking(Instant dateTimeBooking) {
-        this.dateTimeBooking = dateTimeBooking;
+    public void setBookingTime(Instant bookingTime) {
+        this.bookingTime = bookingTime;
+    }
+
+    public void setPaymentTime(Instant paymentTime) {
+        this.paymentTime = paymentTime;
     }
 
     public void printSeatInfo() {
@@ -65,10 +76,16 @@ public class Seat {
                 ", seatClass - " + seatClass +
                 ", status - " + status +
                 (client != null ? (", client - " + client.getId() + " " + client.getName()) : "") +
-                (dateTimeBooking != null
+                (bookingTime != null
                         ? ", booking date - "
-                                + LocalDate.ofInstant(dateTimeBooking, ZoneId.systemDefault()) + ", booking time - "
-                                + LocalTime.ofInstant(dateTimeBooking, ZoneId.systemDefault())
+                                + LocalDate.ofInstant(bookingTime, ZoneId.systemDefault()) + ", booking time - "
+                                + LocalTime.ofInstant(bookingTime, ZoneId.systemDefault())
+                        : "")
+                +
+                (paymentTime != null
+                        ? ", payment date - "
+                                + LocalDate.ofInstant(bookingTime, ZoneId.systemDefault()) + ", payment time - "
+                                + LocalTime.ofInstant(bookingTime, ZoneId.systemDefault())
                         : ""));
     }
 }

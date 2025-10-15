@@ -1,6 +1,7 @@
-package lesson06;
+package lesson07;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Client {
     private String id;
@@ -26,7 +27,18 @@ public class Client {
             if (seat.getStatus() != SeatStatus.BOOKED && seat.getStatus() != SeatStatus.PAID) {
                 seat.setStatus(SeatStatus.BOOKED);
                 seat.setClient(this);
-                seat.setDateTimeBooking(Instant.now());
+                seat.setBookingTime(Instant.now());
+            }
+        }
+    }
+
+    public void pay(Airplane airplane, String seatId) {
+        if (airplane.getSeats().containsKey(seatId)) {
+            Seat seat = airplane.getSeats().get(seatId);
+
+            if (seat.getStatus() == SeatStatus.BOOKED && seat.getClient().equals(this)) {
+                seat.setStatus(SeatStatus.PAID);
+                seat.setPaymentTime(Instant.now());
             }
         }
     }
@@ -38,7 +50,8 @@ public class Client {
             if (seat.getStatus() == SeatStatus.BOOKED) {
                 seat.setStatus(SeatStatus.AVAILABLE);
                 seat.setClient(null);
-                seat.setDateTimeBooking(null);
+                seat.setBookingTime(null);
+                ;
             }
         }
     }
@@ -50,4 +63,20 @@ public class Client {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Client client = (Client) o;
+        return Objects.equals(id, client.id) &&
+                Objects.equals(name, client.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }

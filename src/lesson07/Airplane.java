@@ -1,4 +1,4 @@
-package lesson06;
+package lesson07;
 
 import java.io.*;
 import java.time.Instant;
@@ -12,7 +12,7 @@ public class Airplane {
     private final int rows = 21;
     private final int firstLimitedReclineRow = 7;
     private final int secondLimitedReclineRow = 21;
-    private final static String FILENAME = "src/lesson06/seatsFile.txt";
+    private final static String FILENAME = "src/lesson07/seatsFile.txt";
 
     private LocalDateTime departureDate;
 
@@ -43,8 +43,8 @@ public class Airplane {
                             ", status: " + s.getStatus().ordinal() +
                             (s.getClient() != null ? ", client_id: " + s.getClient().getId() : "") +
                             (s.getClient() != null ? ", client_name: " + s.getClient().getName() : "") +
-                            (s.getDateTimeBooking() != null ? ", booking_date_and_time: " + s.getDateTimeBooking() : "")
-                            +
+                            (s.getBookingTime() != null ? ", booking_date_and_time: " + s.getBookingTime() : "") +
+                            (s.getPaymentTime() != null ? ", payment_date_and_time: " + s.getPaymentTime() : "") +
                             "\n")
                     .forEach(s -> {
                         try {
@@ -87,7 +87,12 @@ public class Airplane {
                     record.get(4).trim().split(" ")[1] + " " + record.get(4).trim().split(" ")[2]);
             seat.setClient(client);
             Instant dateTimeBooking = Instant.parse(record.get(5).trim().split(" ")[1]);
-            seat.setDateTimeBooking(dateTimeBooking);
+            seat.setBookingTime(dateTimeBooking);
+        }
+
+        if (record.size() == 7) {
+            Instant paymentTime = Instant.parse(record.get(6).trim().split(" ")[1]);
+            seat.setPaymentTime(paymentTime);
         }
 
         seats.put(seat.getId(), seat);
@@ -177,6 +182,7 @@ public class Airplane {
     }
 
     public void print() {
+        resetReservedSeats();
         System.out.println();
         Seat seat;
         for (int i = 0; i < 6; i++) {
@@ -203,5 +209,18 @@ public class Airplane {
         System.out.println("");
         System.out.println("\nBusiness class => [ ]\tEconomy class => | |\tLimited recline => | }\n");
         System.out.println("");
+    }
+
+    private void resetReservedSeats() {
+        List<Seat> resrvedSeats = seats.values().stream()
+                .filter(e -> e.getStatus() == SeatStatus.BOOKED)
+                .filter(e -> e.getBookingTime().isBefore(Instant.now().minusSeconds(24 * 60)))
+                .toList();
+
+        for (Seat seat : resrvedSeats) {
+            seat.setStatus(SeatStatus.AVAILABLE);
+            seat.setClient(null);
+            seat.setBookingTime(null);
+        }
     }
 }
