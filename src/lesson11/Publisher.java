@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 
 class Publisher implements Runnable {
     private final BlockingQueue<String> queue;
-    private static final String EXIT_COMMAND = "exit";
+    private static String EXIT = "exit";
 
     public Publisher(BlockingQueue<String> queue) {
         this.queue = queue;
@@ -15,19 +15,22 @@ class Publisher implements Runnable {
     public void run() {
         try (Scanner scanner = new Scanner(System.in)) {
             while (!Thread.currentThread().isInterrupted()) {
-                Thread.sleep(100);
-                System.out.print("Publisher> Введите слово: ");
-                String word = scanner.nextLine();
+                String word = null;
+                if (queue.isEmpty()) {
+                    word = scanner.nextLine();
+                    queue.put(word);
+                }
 
-                queue.put(word);
-                System.out.println("Publisher> Добавлено в очередь: " + word);
-
-                if (word.equalsIgnoreCase(EXIT_COMMAND)) {
+                if (word.equalsIgnoreCase(EXIT))
                     break;
+
+                if (word != null) {
+                    System.out.println("Publisher -> Добавлено в очередь: " + word);
                 }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        System.out.println("Publisher завершил свою работу.");
     }
 }

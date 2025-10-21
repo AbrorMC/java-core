@@ -15,13 +15,11 @@ public class Main {
         Publisher publisher = new Publisher(queue);
         Subscriber subscriber = new Subscriber(queue);
 
-        System.out.println("Система Publisher/Subscriber запущена. Вводите слова или 'exit' для завершения.");
+        System.out.println("Введите слово или 'exit' для завершения.");
 
-        executorService.submit(publisher);
-        executorService.submit(subscriber);
+        executorService.execute(publisher);
+        executorService.execute(subscriber);
 
         executorService.shutdown();
-
-        System.out.println("Программа завершена.");
     }
 }
