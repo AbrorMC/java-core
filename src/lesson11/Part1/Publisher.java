@@ -1,4 +1,4 @@
-package lesson11;
+package lesson11.Part1;
 
 import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
@@ -15,18 +15,16 @@ class Publisher implements Runnable {
     public void run() {
         try (Scanner scanner = new Scanner(System.in)) {
             while (!Thread.currentThread().isInterrupted()) {
-                String word = null;
-                if (queue.isEmpty()) {
-                    word = scanner.nextLine();
-                    queue.put(word);
-                }
+                String word = scanner.nextLine();
+
+                if (!word.equalsIgnoreCase(EXIT))
+                    System.out.println("Publisher -> Добавлено в очередь: " + word);
+
+                queue.put(word);
 
                 if (word.equalsIgnoreCase(EXIT))
                     break;
 
-                if (word != null) {
-                    System.out.println("Publisher -> Добавлено в очередь: " + word);
-                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

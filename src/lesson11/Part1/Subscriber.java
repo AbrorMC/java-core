@@ -1,4 +1,4 @@
-package lesson11;
+package lesson11.Part1;
 
 import java.util.concurrent.BlockingQueue;
 
