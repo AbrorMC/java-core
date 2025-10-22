@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 // import java.util.concurrent.locks.Condition;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MyThreadPoolExecutor {
@@ -13,7 +15,8 @@ public class MyThreadPoolExecutor {
     private final HashSet<Worker> workers;
 
     private final ReentrantLock mainLock = new ReentrantLock();
-    // private final Condition termination = mainLock.newCondition();
+    private final Condition termination = mainLock.newCondition();
+    private boolean isShutdown = false;
 
     public MyThreadPoolExecutor(int corePoolSize) {
         this.corePoolSize = corePoolSize;
@@ -45,24 +48,63 @@ public class MyThreadPoolExecutor {
         taskQueue.add(task);
     }
 
+    public void shutdown() {
+        isShutdown = true;
+        mainLock.lock();
+        try {
+            for (Worker worker : workers) {
+                Thread t = worker.t;
+                if (!t.isInterrupted()) {
+                    t.interrupt();
+                }
+            }
+        } finally {
+            mainLock.unlock();
+        }
+    }
+
+    public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+        long nanos = unit.toNanos(timeout);
+        mainLock.lock();
+        try {
+            while (isShutdown && taskQueue.isEmpty()) {
+                if (nanos <= 0L)
+                    return false;
+                nanos = termination.awaitNanos(nanos);
+            }
+            return true;
+        } finally {
+            mainLock.unlock();
+        }
+    }
+
     private void addWorker(Runnable firstTask) {
         Worker worker = new Worker(firstTask);
         mainLock.lock();
         try {
-            workers.add(worker);
+            if (!isShutdown)
+                workers.add(worker);
         } finally {
             mainLock.unlock();
         }
-        worker.run();
+        worker.t.start();
     }
 
     private void runWorker(Worker worker) {
         Runnable task = worker.firstTask;
         worker.firstTask = null;
 
-        while (task != null || (getTask() != null)) {
-            task.run();
-            task = taskQueue.poll();
+        try {
+            while (task != null || (task = getTask()) != null) {
+                try {
+                    task.run();
+                } finally {
+                    task = null;
+                }
+                task = taskQueue.poll();
+            }
+        } finally {
+            deleteWorker(worker);
         }
     }
 
@@ -71,6 +113,18 @@ public class MyThreadPoolExecutor {
             return taskQueue.take();
         } catch (InterruptedException e) {
             return null;
+        }
+    }
+
+    private void deleteWorker(Worker worker) {
+        mainLock.lock();
+        try {
+            workers.remove(worker);
+            if (isShutdown && workers.isEmpty()) {
+                termination.signalAll();
+            }
+        } finally {
+            mainLock.unlock();
         }
     }
 
