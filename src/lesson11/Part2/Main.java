@@ -25,7 +25,7 @@ public class Main {
         executor.shutdown();
 
         try {
-            if (executor.awaitTermination(50 * 10 ^ 9, TimeUnit.SECONDS)) {
+            if (executor.awaitTermination(5, TimeUnit.SECONDS)) {
                 System.out.println("Все задачи завершены");
             } else {
                 System.out.println("Истек таймаут ожидания");

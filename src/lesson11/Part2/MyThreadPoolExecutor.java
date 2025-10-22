@@ -48,14 +48,11 @@ public class MyThreadPoolExecutor {
     }
 
     public void shutdown() {
-        isShutdown = true;
         mainLock.lock();
         try {
-            for (Worker worker : workers) {
-                Thread t = worker.t;
-                if (!t.isInterrupted()) {
-                    t.interrupt();
-                }
+            isShutdown = true;
+            if (workers.isEmpty()) {
+                termination.signalAll();
             }
         } finally {
             mainLock.unlock();
@@ -66,7 +63,7 @@ public class MyThreadPoolExecutor {
         long nanos = unit.toNanos(timeout);
         mainLock.lock();
         try {
-            while (isShutdown && taskQueue.isEmpty()) {
+            while (!isShutdown || !taskQueue.isEmpty() || !workers.isEmpty()) {
                 if (nanos <= 0L)
                     return false;
                 nanos = termination.awaitNanos(nanos);
@@ -108,6 +105,8 @@ public class MyThreadPoolExecutor {
 
     private Runnable getTask() {
         try {
+            if (isShutdown && taskQueue.isEmpty())
+                return null;
             return taskQueue.take();
         } catch (InterruptedException e) {
             return null;
@@ -118,10 +117,8 @@ public class MyThreadPoolExecutor {
         mainLock.lock();
         try {
             workers.remove(worker);
-            if (isShutdown && workers.isEmpty()) {
+            if (isShutdown && workers.isEmpty())
                 termination.signalAll();
-                isShutdown = true;
-            }
         } finally {
             mainLock.unlock();
         }
