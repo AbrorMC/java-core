@@ -1,6 +1,8 @@
-package lesson06;
+package lesson07;
 
 import java.io.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Airplane {
@@ -10,14 +12,21 @@ public class Airplane {
     private final int rows = 21;
     private final int firstLimitedReclineRow = 7;
     private final int secondLimitedReclineRow = 21;
-    private final static String FILENAME = "src/lesson06/seatsFile.txt";
+    private final static String FILENAME = "src/lesson07/seatsFile.txt";
 
-    public Airplane() {
+    private LocalDateTime departureDate;
+
+    public Airplane(LocalDateTime departureDate) {
+        this.departureDate = departureDate;
         initSeats();
     }
 
     public Map<String, Seat> getSeats() {
         return seats;
+    }
+
+    public LocalDateTime getDepartureDate() {
+        return departureDate;
     }
 
     private void initSeats() {
@@ -31,9 +40,11 @@ public class Airplane {
             seats.values().stream()
                     .map(s -> "id: " + s.getId() +
                             ", class: " + s.getSeatClass().ordinal() +
-                            ", booked: " + s.isBooked() +
+                            ", status: " + s.getStatus().ordinal() +
                             (s.getClient() != null ? ", client_id: " + s.getClient().getId() : "") +
                             (s.getClient() != null ? ", client_name: " + s.getClient().getName() : "") +
+                            (s.getBookingTime() != null ? ", booking_date_and_time: " + s.getBookingTime() : "") +
+                            (s.getPaymentTime() != null ? ", payment_date_and_time: " + s.getPaymentTime() : "") +
                             "\n")
                     .forEach(s -> {
                         try {
@@ -68,13 +79,20 @@ public class Airplane {
                 record.get(0).trim().split(" ")[1],
                 SeatClass.values()[Integer.parseInt(record.get(1).trim().split(" ")[1])]);
 
-        seat.setBooked(Boolean.parseBoolean(record.get(2).trim().split(" ")[1]));
+        seat.setStatus(SeatStatus.values()[Integer.parseInt(record.get(2).trim().split(" ")[1])]);
 
-        if (record.size() == 5) {
+        if (record.size() == 6) {
             Client client = new Client(
                     record.get(3).trim().split(" ")[1],
-                    record.get(4).trim().split(" ")[1]);
+                    record.get(4).trim().split(" ")[1] + " " + record.get(4).trim().split(" ")[2]);
             seat.setClient(client);
+            Instant dateTimeBooking = Instant.parse(record.get(5).trim().split(" ")[1]);
+            seat.setBookingTime(dateTimeBooking);
+        }
+
+        if (record.size() == 7) {
+            Instant paymentTime = Instant.parse(record.get(6).trim().split(" ")[1]);
+            seat.setPaymentTime(paymentTime);
         }
 
         seats.put(seat.getId(), seat);
@@ -144,19 +162,27 @@ public class Airplane {
         }
     }
 
-    public void getReservedSeats() {
+    public void getPaidSeats() {
         seats.values().stream()
-                .filter(Seat::isBooked)
+                .filter(e -> e.getStatus() == SeatStatus.PAID)
                 .forEach(Seat::printSeatInfo);
     }
 
-    public void getFreeSeats() {
+    public void getReservedSeats() {
         seats.values().stream()
-                .filter(s -> !s.isBooked())
+                .filter(e -> e.getStatus() == SeatStatus.BOOKED)
                 .forEach(Seat::printSeatInfo);
+    }
+
+    public void getAvailableSeats() {
+        seats.values().stream()
+                .filter(s -> s.getStatus() == SeatStatus.AVAILABLE)
+                .forEach(Seat::printSeatInfo);
+        System.out.println();
     }
 
     public void print() {
+        resetReservedSeats();
         System.out.println();
         Seat seat;
         for (int i = 0; i < 6; i++) {
@@ -165,7 +191,8 @@ public class Airplane {
                 if (seats.containsKey("" + (char) ('A' + i) + (int) (j + 1))) {
                     seat = seats.get("" + (char) ('A' + i) + (int) (j + 1));
                     System.out.printf("%s", seat.getSeatClass() == SeatClass.BUSINESS_CLASS ? "[" : "|");
-                    System.out.printf("%s", seat.isBooked() ? "*" : " ");
+                    System.out.printf("%s", seat.getStatus() == SeatStatus.BOOKED ? "*"
+                            : seat.getStatus() == SeatStatus.PAID ? "$" : " ");
                     System.out.printf("%s",
                             seat.getSeatClass() == SeatClass.BUSINESS_CLASS ? "]\t"
                                     : seat.getSeatClass() == SeatClass.LIMITED_RECLINE ? "}\t" : "|\t");
@@ -182,5 +209,18 @@ public class Airplane {
         System.out.println("");
         System.out.println("\nBusiness class => [ ]\tEconomy class => | |\tLimited recline => | }\n");
         System.out.println("");
+    }
+
+    private void resetReservedSeats() {
+        List<Seat> resrvedSeats = seats.values().stream()
+                .filter(e -> e.getStatus() == SeatStatus.BOOKED)
+                .filter(e -> e.getBookingTime().isBefore(Instant.now().minusSeconds(24 * 60)))
+                .toList();
+
+        for (Seat seat : resrvedSeats) {
+            seat.setStatus(SeatStatus.AVAILABLE);
+            seat.setClient(null);
+            seat.setBookingTime(null);
+        }
     }
 }
