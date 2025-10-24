@@ -1,8 +1,10 @@
+package lesson02;
+
 import java.util.Scanner;
 
 public class PartThree {
     public static final Scanner scanner = new Scanner(System.in);
-    
+
     public void startGame() {
         System.out.println("\nСцена 1: Пробуждение. Не доверяй голосам. Иди к северу.");
 
@@ -34,7 +36,8 @@ public class PartThree {
     }
 
     private void runScene2B() {
-        System.out.println("\nСцена 2Б: Северный путь. Озеро просыпается в полнолуние. Не верь голосам. Прячься до рассвета.");
+        System.out.println(
+                "\nСцена 2Б: Северный путь. Озеро просыпается в полнолуние. Не верь голосам. Прячься до рассвета.");
 
         System.out.println("1: Остаться в доме до рассвета.");
         System.out.println("2: Выйти и идти дальше в туман.");

@@ -1,3 +1,5 @@
+package lesson02;
+
 import java.util.Scanner;
 import java.lang.Math;
 
@@ -54,7 +56,7 @@ public class PartOne {
         }
         return result;
     }
-    
+
     private void numbersFromOneToHundred() {
         int number = 1;
         while (number <= 100) {
@@ -95,7 +97,7 @@ public class PartOne {
         }
         System.out.println(result + "\n");
     }
-    
+
     private void sumOfDigits(int number) {
         int result = 0, digit = 0;
         while (number > 0) {
@@ -105,7 +107,7 @@ public class PartOne {
         }
         System.out.println(result + "\n");
     }
-    
+
     private void turnNumber(int number) {
         int result = 0, digit = 0;
         while (number > 0) {
@@ -115,7 +117,7 @@ public class PartOne {
         }
         System.out.println(result + "\n");
     }
-    
+
     private void findDivisibleToSeven() {
         int result = 0, digit = 0, number = 1000;
         while (true) {
@@ -128,7 +130,7 @@ public class PartOne {
         }
         System.out.println(result + "\n");
     }
-    
+
     private void printPrimeNumbers(int number) {
         int curNumber = 2;
         while (curNumber < number) {
@@ -138,7 +140,7 @@ public class PartOne {
         }
         System.out.println("\n");
     }
-    
+
     private Boolean isPrime(int number) {
         for (int i = 2; i < Math.sqrt(number) + 1; i++) {
             if (number % i == 0 && number != 2)
@@ -159,9 +161,9 @@ public class PartOne {
             }
             System.out.print("\n");
         }
-        
+
         System.out.print("\n");
-        
+
         for (int i = 0; i < number; i++) {
             for (int j = 0; j < 2 * number; j++) {
                 if (j + i < 2 * number - 1 && j + i >= number) {
@@ -171,6 +173,6 @@ public class PartOne {
                 }
             }
             System.out.print("\n");
-        } 
+        }
     }
 }

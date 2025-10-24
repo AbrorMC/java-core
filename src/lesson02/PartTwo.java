@@ -1,3 +1,5 @@
+package lesson02;
+
 import java.util.Scanner;
 import java.util.Random;
 import java.lang.Math;
@@ -49,7 +51,8 @@ public class PartTwo {
         while (group > 0) {
             for (int i = 1; i <= 10; i++) {
                 for (int j = (count - 1) * 5 + 1; j <= count * 5; j++) {
-                    if (j > maxValue) break;
+                    if (j > maxValue)
+                        break;
                     System.out.print(j + " * " + i + " = " + i * j + "\t");
                 }
                 System.out.println("");
@@ -66,7 +69,8 @@ public class PartTwo {
     }
 
     private void printOddOrEven(int number) {
-        System.out.println((number % 2 == 0) ? "The number " + number + " is even" : "The number " + number + " is odd");
+        System.out
+                .println((number % 2 == 0) ? "The number " + number + " is even" : "The number " + number + " is odd");
     }
 
     private void printMax(int a, int b, int c) {
@@ -111,10 +115,12 @@ public class PartTwo {
         }
         for (int i = 0; i < array.length; i++) {
             isContains = array[i] == value;
-            if (isContains) break;
+            if (isContains)
+                break;
         }
 
-        System.out.println(isContains ? "The number " + value + " is in the array" : "The number " + value + " is not in the array");
+        System.out.println(isContains ? "The number " + value + " is in the array"
+                : "The number " + value + " is not in the array");
     }
 
     private void guessTheNumber() {
