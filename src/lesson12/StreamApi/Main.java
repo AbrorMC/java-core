@@ -1,12 +1,8 @@
 package lesson12.StreamApi;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -105,7 +101,7 @@ public class Main {
                 inputList.add(string);
         }
 
-        Collections.sort(inputList, Comparator.comparingInt(String::length));
+        inputList.sort(Comparator.comparingInt(String::length));
 
         System.out.println(inputList);
         System.out.println("===============");
@@ -165,11 +161,11 @@ public class Main {
         System.out.println("Loop");
 
         List<String> namesList2 = List.of("Tom", "Jerry", "Spike");
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < namesList2.size(); i++) {
-            result += namesList2.get(i);
+            result.append(namesList2.get(i));
             if (i != namesList2.size() - 1)
-                result += ", ";
+                result.append(", ");
         }
         System.out.println(result);
         System.out.println("===============");
@@ -188,15 +184,51 @@ public class Main {
         List<String> wordsList = new ArrayList<>();
         for (String sentence : sentences) {
             String[] wordsArray = sentence.split(" ");
-            for (int i = 0; i < wordsArray.length; i++) {
-                wordsList.add(wordsArray[i]);
-            }
+            wordsList.addAll(Arrays.asList(wordsArray));
         }
         System.out.println(wordsList);
         System.out.println("===============");
 
         System.out.println("StreamApi");
-        wordsList = sentences.stream().reduce((x, y) -> x + " " + y).flatMap(null);
-        System.out.println(wordsList);
+        List<String> temp = sentences.stream()
+                .reduce((x,y) -> x + " " + y)
+                .map(s -> s.split(" "))
+                .map(Arrays::asList)
+                .get();
+        System.out.println(temp);
+        System.out.println("===============");
+
+        System.out.println("###############");
+        System.out.println("Task 10.");
+        System.out.println("###############");
+        System.out.println("Loop");
+
+        record Product(String name, String category, double price) {}
+        List<Product> products = List.of(
+                new Product("Phone", "Electronics", 1200),
+                new Product("TV", "Electronics", 1800),
+                new Product("Apple", "Fruits", 2.5),
+                new Product("Mango", "Fruits", 4.0));
+        Map<String, Product> productMap = new HashMap<>();
+
+        for (Product product : products) {
+            if (!productMap.containsKey(product.category)) {
+                productMap.put(product.category, product);
+            } else if (product.price > productMap.get(product.category).price){
+                productMap.put(product.category, product);
+            }
+        }
+        System.out.println(productMap);
+        System.out.println("===============");
+
+        System.out.println("StreamApi");
+        Map<String, Product> productMapStream = products.stream()
+                .collect(Collectors.toMap(
+                        Product::category,
+                        Function.identity(),
+                        BinaryOperator.maxBy(Comparator.comparingDouble(Product::price))
+                ));
+        System.out.println(productMapStream);
+        System.out.println("===============");
     }
 }
